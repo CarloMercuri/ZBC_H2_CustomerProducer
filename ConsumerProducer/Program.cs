@@ -59,12 +59,23 @@ namespace ConsumerProducer
 
         static void ProducerE()
         {
+            int attempts = 0;
+
             while (true)
             {
                 if (!Buffer.TryInsertProduct())
                 {
-                    Console.WriteLine("Producer taking a break.");
-                    Thread.Sleep(3000);
+                    attempts++;
+
+                    if(attempts > 7)
+                    {
+                        attempts = 0;
+                        Console.WriteLine("Producer taking a break.");
+                        Thread.Sleep(3000);
+                        continue;
+                    }
+
+                    Console.WriteLine("Producer cannot produce more. Buffer is full.");                    
                 }
                 else
                 {
